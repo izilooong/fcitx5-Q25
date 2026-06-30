@@ -33,6 +33,7 @@ class CandidateUi(override val ctx: Context, theme: Theme, private val horizonta
 
     val keyboardToggleButton = ToolButton(ctx, R.drawable.ic_baseline_keyboard_24, theme).apply {
         id = R.id.toggle_keyboard_btn
+        visibility = View.GONE
     }
 
     val expandButton = ToolButton(ctx, R.drawable.ic_baseline_expand_more_24, theme).apply {
