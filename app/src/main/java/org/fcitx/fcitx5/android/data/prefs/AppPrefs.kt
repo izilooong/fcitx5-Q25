@@ -258,10 +258,10 @@ class AppPrefs(private val sharedPreferences: SharedPreferences) {
                 R.string.expanded_candidate_grid_span_count,
                 R.string.portrait,
                 "expanded_candidate_grid_span_count_portrait",
-                6,
+                5,
                 R.string.landscape,
                 "expanded_candidate_grid_span_count_landscape",
-                8,
+                5,
                 4,
                 12,
             )
@@ -276,7 +276,7 @@ class AppPrefs(private val sharedPreferences: SharedPreferences) {
         val mode = enumList(
             R.string.show_candidates_window,
             "show_candidates_window",
-            FloatingCandidatesMode.InputDevice
+            FloatingCandidatesMode.Disabled
         )
 
         val orientation = enumList(

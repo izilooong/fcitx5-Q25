@@ -13,7 +13,7 @@ android {
     namespace = "org.fcitx.fcitx5.android"
 
     defaultConfig {
-        applicationId = "org.fcitx.fcitx5.android"
+        applicationId = "fcitx5.q25"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         @Suppress("UnstableApiUsage")
@@ -51,12 +51,13 @@ android {
             resValue("string", "app_name", "@string/app_name_debug")
         }
     }
-
     androidResources {
         @Suppress("UnstableApiUsage")
         generateLocaleConfig = true
     }
 }
+
+
 
 fcitxComponent {
     includeLibs = listOf(

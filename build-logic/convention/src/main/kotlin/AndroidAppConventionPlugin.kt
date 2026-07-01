@@ -137,7 +137,7 @@ class AndroidAppConventionPlugin : AndroidBaseConventionPlugin() {
                 it.defaultConfig {
                     // https://www.norio.be/blog/archivesBaseName-removed-from-gradle9.html
                     target.extensions.configure<BasePluginExtension> {
-                        archivesName.set("$applicationId-$versionName")
+                        archivesName.set("$applicationId")
                     }
                 }
             }
