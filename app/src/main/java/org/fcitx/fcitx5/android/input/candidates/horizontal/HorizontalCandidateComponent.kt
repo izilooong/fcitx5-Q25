@@ -125,10 +125,22 @@ class HorizontalCandidateComponent :
         return adapter.selectionIndexForDisplayNumber(normalized)
     }
 
+    fun selectionIndexAtVisiblePosition(position: Int): Int? {
+        if (position < 0) return null
+        return adapter.selectionIndexAtDisplayPosition(position)
+    }
+
     fun currentCandidatePagingMode(): Int = candidatePagingMode
+
+    fun visibleCandidateCount(): Int = adapter.itemCount
 
     fun candidateForLocalNumber(number: Int): org.fcitx.fcitx5.android.core.CandidateWord? {
         val index = selectionIndexForLocalNumber(number) ?: return null
+        return pageCandidates.getOrNull(index)
+    }
+
+    fun candidateAtVisiblePosition(position: Int): org.fcitx.fcitx5.android.core.CandidateWord? {
+        val index = selectionIndexAtVisiblePosition(position) ?: return null
         return pageCandidates.getOrNull(index)
     }
 

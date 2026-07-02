@@ -42,6 +42,7 @@ import org.fcitx.fcitx5.android.input.bar.ExpandButtonStateMachine.State.ClickTo
 import org.fcitx.fcitx5.android.input.bar.ExpandButtonStateMachine.State.Hidden
 import org.fcitx.fcitx5.android.input.bar.KawaiiBarStateMachine.BooleanKey.CandidateEmpty
 import org.fcitx.fcitx5.android.input.bar.KawaiiBarStateMachine.BooleanKey.PreeditEmpty
+import org.fcitx.fcitx5.android.input.bar.KawaiiBarStateMachine.State.Candidate
 import org.fcitx.fcitx5.android.input.bar.KawaiiBarStateMachine.TransitionEvent.CandidatesUpdated
 import org.fcitx.fcitx5.android.input.bar.KawaiiBarStateMachine.TransitionEvent.ExtendedWindowAttached
 import org.fcitx.fcitx5.android.input.bar.KawaiiBarStateMachine.TransitionEvent.PreeditUpdated
@@ -466,6 +467,8 @@ class KawaiiBarComponent : UniqueViewComponent<KawaiiBarComponent, FrameLayout>(
         ui.prevPageButton.alpha = if (hasPrev) 1f else 0.35f
         ui.nextPageButton.alpha = if (hasNext) 1f else 0.35f
     }
+
+    fun isCandidateUiShowing(): Boolean = view.displayedChild == Candidate.ordinal
 
     private fun switchUiByState(state: KawaiiBarStateMachine.State) {
         val index = state.ordinal

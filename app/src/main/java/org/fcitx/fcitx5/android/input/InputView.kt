@@ -26,6 +26,7 @@ import org.fcitx.fcitx5.android.data.prefs.ManagedPreferenceProvider
 import org.fcitx.fcitx5.android.data.theme.Theme
 import org.fcitx.fcitx5.android.data.theme.ThemeManager
 import org.fcitx.fcitx5.android.input.bar.KawaiiBarComponent
+import org.fcitx.fcitx5.android.input.bar.ui.CandidateUi
 import org.fcitx.fcitx5.android.input.broadcast.InputBroadcaster
 import org.fcitx.fcitx5.android.input.broadcast.PreeditEmptyStateComponent
 import org.fcitx.fcitx5.android.input.broadcast.PunctuationComponent
@@ -379,42 +380,67 @@ class InputView(
         broadcaster.onSelectionUpdate(start, end)
     }
 
-    private fun hardwareCandidateNumber(event: KeyEvent): Int? {
-        if (event.action != KeyEvent.ACTION_DOWN) return null
-        return when (event.keyCode) {
-            KeyEvent.KEYCODE_SPACE -> 1
-            KeyEvent.KEYCODE_0, KeyEvent.KEYCODE_NUMPAD_0 -> 0
-            KeyEvent.KEYCODE_1, KeyEvent.KEYCODE_NUMPAD_1 -> 1
-            KeyEvent.KEYCODE_2, KeyEvent.KEYCODE_NUMPAD_2 -> 2
-            KeyEvent.KEYCODE_3, KeyEvent.KEYCODE_NUMPAD_3 -> 3
-            KeyEvent.KEYCODE_4, KeyEvent.KEYCODE_NUMPAD_4 -> 4
-            KeyEvent.KEYCODE_5, KeyEvent.KEYCODE_NUMPAD_5 -> 5
-            KeyEvent.KEYCODE_6, KeyEvent.KEYCODE_NUMPAD_6 -> 6
-            KeyEvent.KEYCODE_7, KeyEvent.KEYCODE_NUMPAD_7 -> 7
-            KeyEvent.KEYCODE_8, KeyEvent.KEYCODE_NUMPAD_8 -> 8
-            KeyEvent.KEYCODE_9, KeyEvent.KEYCODE_NUMPAD_9 -> 9
-            else -> {
-                val c = event.unicodeChar.takeIf { it > 0 }?.toChar() ?: return null
-                when {
-                    c == ' ' -> 1
-                    c.isDigit() -> c.digitToInt()
-                    else -> null
-                }
-            }
-        }
-    }
-
     fun handleHardwareCandidateShortcut(event: KeyEvent): Boolean {
-        val number = hardwareCandidateNumber(event) ?: return false
-        val index = horizontalCandidate.selectionIndexForLocalNumber(number) ?: return false
+        if (event.action != KeyEvent.ACTION_DOWN) return false
+        if (!kawaiiBar.isCandidateUiShowing()) return false
+
+        if (handleHardwareCandidatePaging(event)) return true
+
+        val count = horizontalCandidate.visibleCandidateCount()
+        if (count <= 0) return false
+
+        val target = when (event.keyCode) {
+            KeyEvent.KEYCODE_SPACE -> HardwareCandidateTarget.ByNumber(1)
+            KeyEvent.KEYCODE_SHIFT_LEFT -> HardwareCandidateTarget.ByVisiblePosition(CandidateUi.BlackBerryLeftSlot)
+            KeyEvent.KEYCODE_0, KeyEvent.KEYCODE_NUMPAD_0 -> {
+                if (count <= CandidateUi.BlackBerryInnerLeftSlot) return false
+                HardwareCandidateTarget.ByVisiblePosition(CandidateUi.BlackBerryInnerLeftSlot)
+            }
+            KeyEvent.KEYCODE_SYM,
+            KeyEvent.KEYCODE_PICTSYMBOLS,
+            KeyEvent.KEYCODE_ALT_RIGHT -> {
+                val position = count - 2
+                if (position < 0) return false
+                HardwareCandidateTarget.ByVisiblePosition(position)
+            }
+            KeyEvent.KEYCODE_SHIFT_RIGHT -> HardwareCandidateTarget.ByVisiblePosition(count - 1)
+            else -> return false
+        }
+
+        val index = when (target) {
+            is HardwareCandidateTarget.ByNumber -> horizontalCandidate.selectionIndexForLocalNumber(target.number)
+            is HardwareCandidateTarget.ByVisiblePosition -> horizontalCandidate.selectionIndexAtVisiblePosition(target.position)
+        } ?: return false
+
         service.postFcitxJob {
             setCandidatePagingMode(horizontalCandidate.currentCandidatePagingMode())
             if (select(index)) return@postFcitxJob
-            val candidate = horizontalCandidate.candidateForLocalNumber(number) ?: return@postFcitxJob
+            val candidate = when (target) {
+                is HardwareCandidateTarget.ByNumber -> horizontalCandidate.candidateForLocalNumber(target.number)
+                is HardwareCandidateTarget.ByVisiblePosition -> horizontalCandidate.candidateAtVisiblePosition(target.position)
+            } ?: return@postFcitxJob
             service.finishComposing()
             service.commitText(candidate.text)
         }
         return true
+    }
+
+    private fun handleHardwareCandidatePaging(event: KeyEvent): Boolean {
+        val keyChar = event.unicodeChar.takeIf { it > 0 }?.toChar()
+        val isPageKey = when {
+            event.keyCode == KeyEvent.KEYCODE_GRAVE -> true
+            keyChar == '$' -> true
+            keyChar == '`' -> true
+            else -> false
+        }
+        if (!isPageKey) return false
+        horizontalCandidate.page(if (event.isAltPressed) -1 else 1)
+        return true
+    }
+
+    private sealed interface HardwareCandidateTarget {
+        data class ByNumber(val number: Int) : HardwareCandidateTarget
+        data class ByVisiblePosition(val position: Int) : HardwareCandidateTarget
     }
 
     @RequiresApi(Build.VERSION_CODES.R)

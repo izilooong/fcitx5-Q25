@@ -21,6 +21,15 @@ import splitties.views.dsl.core.add
 
 class CandidateUi(override val ctx: Context, theme: Theme, private val horizontalView: View) : Ui {
 
+    companion object {
+        const val BlackBerryLeftSlot = 0
+        const val BlackBerryInnerLeftSlot = 1
+        const val BlackBerryCenterSlot = 2
+        const val BlackBerryInnerRightSlot = 3
+        const val BlackBerryRightSlot = 4
+        const val BlackBerryBottomRowKeyCount = 5
+    }
+
     val prevPageButton = ToolButton(ctx, R.drawable.ic_baseline_arrow_prev_24, theme).apply {
         id = R.id.prev_candidate_btn
         visibility = View.INVISIBLE

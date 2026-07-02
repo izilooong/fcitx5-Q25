@@ -1,0 +1,5 @@
+{
+  "github.copilot.chat.codeGeneration.instructions": [
+    "When analyzing code structure, callers, callees, dependencies, or complexity, prefer codegraph_* tools over file search. CodeGraph has a pre-built semantic graph that returns structured results instantly."
+  ]
+}
