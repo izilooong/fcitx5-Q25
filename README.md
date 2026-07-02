@@ -1,3 +1,5 @@
+<img width="1576" height="2659" alt="blackberry-light" src="https://github.com/user-attachments/assets/34ba9746-a1bb-4cae-8e4f-d27056b0e91d" />
+
 # Fcitx5 · Q25 全键盘适配版（BlackBerry Classic 硬件复刻）
 
 [![build status](https://img.shields.io/jenkins/build.svg?jobUrl=https://jenkins.fcitx-im.org/job/android/job/fcitx5-android/)]
@@ -17,7 +19,8 @@
 ## ⌨️ 针对 Q25（BlackBerry Classic）的专项适配
 
 本仓库针对 **Q25 设备（硬件对标 BlackBerry Classic Q20）** 的独特硬件特性，做了以下定向优化：
-
+<img width="157" height="265" alt="blackberry-dark" src="https://github.com/user-attachments/assets/ba82d97a-733b-46a5-be4e-aba617ea7a60" />
+<img width="157" height="265" alt="blackberry-light" src="https://github.com/user-attachments/assets/34ba9746-a1bb-4cae-8e4f-d27056b0e91d" />
 ### 物理键盘选字
 
 适配物理键盘5大金刚键(⬆️ 0️⃣ 🈳 sym ⬆️)选字，提升输入效率。
