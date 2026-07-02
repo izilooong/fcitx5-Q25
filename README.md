@@ -27,9 +27,15 @@
 
 适配物理键盘5大金刚键(⬆️ 0️⃣ 🈳 sym ⬆️)选字，提升输入效率。
 
+<img width="1377" height="273" alt="image" src="https://github.com/user-attachments/assets/a27f825e-9000-4deb-adbc-e7a055097ab6" />
+
+
 ### 组合键选字
 
 深度适配 Q25 的 **Alt + 数字 组合键** 逻辑，物理数字键直接选词（1~5 对应候选词位置）、物理空格键快速上屏等高频操作，还原 BlackBerry 经典输入手感。
+
+<img width="1278" height="243" alt="image" src="https://github.com/user-attachments/assets/666baa7e-f821-4529-9350-f10106256b1f" />
+
 
 ### 硬件形态对标 Classic (Q20)
 
